@@ -1,1 +1,0 @@
-# jm1012.github.io
