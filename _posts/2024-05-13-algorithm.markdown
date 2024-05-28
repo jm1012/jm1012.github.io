@@ -3,10 +3,9 @@ layout: post
 title:  "algorithms"
 date:   2024-05-12 03:00:00 +0900
 categories: c++ algorithm
-
 ---
 
-
+a summary of algorithms
 
 # Index
 
