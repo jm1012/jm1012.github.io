@@ -6,7 +6,7 @@ categories: c++ algorithm
 
 ---
 
----
+
 
 # Index
 
@@ -23,6 +23,8 @@ categories: c++ algorithm
 [6. Priority queue](#6.-Priority-queue)
 
 [7. Graph search](#7.-Graph-search)
+
+[8. Dijkstra's algorithm]
 
 
 
@@ -157,3 +159,74 @@ int f(int n) //피보나치 수열의 제 n항을 구한다. 배열의 관점에
 
 
 
+# 8. Dijkstra's algorithm
+
+- c++ code
+
+```c++
+// 1..N 노드가 임의의 가중치가 부여된 방향이 없는 간선으로 연결되어있음
+// 다음 코드는 start 노드에서 출발하여, 모든 노드에 대한 최단 거리를 구하는 코드임
+void dijkstra(int start)
+{
+  	// 거리 초기화, start에서 모든 노드까지 거리를 INF로 초기화함.
+	init();
+	
+    // priority queue
+	// pair<target, distance> 를 인자로 함
+	// 현 시점 start ~ target 사이 최단 경로인 distance를 기록
+	// distance 가 최소인 값이 top에 오는 형태로, 거리가 가까운 노드부터 탐색하고자함
+	priority_queue<pair<int, int>, vector<pair<int, int>>, cmp> priority_que;
+
+	priority_que.push({ start,0 });
+	distance_start_to[start] = 0;
+
+	while (!priority_que.empty())
+	{
+		int current = priority_que.top().first;
+		int current_dist = priority_que.top().second;
+		priority_que.pop();
+
+		// 탐색할 필요없는 케이스
+		if (distance_start_to[current] < current_dist)
+			continue;
+
+		// current 에 이웃한 노드
+		for (int i = 0; i < adjacent[current].size(); i++)
+		{
+			int next = adjacent[current][i].first;
+			int next_dist = adjacent[current][i].second;
+
+			// 거리갱신
+			if (distance_start_to[next] > distance_start_to[current] + next_dist)
+			{
+				distance_start_to[next] = distance_start_to[current] + next_dist;
+				priority_que.push({ next,distance_start_to[current] + next_dist });
+			}
+		}
+	}
+}
+```
+
+
+
+- outline
+
+  다익스트라 알고리즘은 한 노드로 부터 나머지 노드까지 최단거리를 구하는 알고리즘이다. (one-to-all)
+
+  구현시 priority queue 를 사용한다.
+
+  *O*(*El**o**g**E*+*El**o**g**E*) 의 시간복잡도를 가짐
+
+
+
+- algorithm
+
+  0. 노드 A 와 B 사이 거리를 `P(A,B)`라고 가정한다. 
+
+  1. 출발점에서 다른 노드까지 거리를 저장할 배열을 만들고 INF 로 초기화. 출발점에서 A 까지 거리 = `d(A)`
+  2. 현재 노드를 저장하는 변수 `current` 에 출발할 노드를 할당한다.
+  3. `current`에 이웃한 노드 `adjacent_node` 에 대해, `d(current) + P(current,adjacent_node)` < `d(adjacent_node)` 인 경우 : `d(adjacent_node)` 를 다음 값으로 갱신한다 :`d(current) + P(current,adjacent_node)`.
+  4. `current`에 이웃한 모든 노드 `adjacent_node`에 대해 `3.`을 반복한다.
+  5. `current`를 `방문완료` 상태로 바꾼다.
+  6. 미방문노드  `K` 중 `d(K)`가 최소인 노드를 찾고 `current`에 할당한다.
+  7. 도착노드가 방문완료 상태가 되거나, 더 이상의 미방문 노드가 없을때까지 `3.` ~ `6.` 을 반복한다.
