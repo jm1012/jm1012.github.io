@@ -215,7 +215,7 @@ void dijkstra(int start)
 
   구현시 priority queue 를 사용한다.
 
-  *O*(*El**o**g**E*+*El**o**g**E*) 의 시간복잡도를 가짐
+  *O*(*ElogE*+*ElogE*) 의 시간복잡도를 가짐
 
 
 
