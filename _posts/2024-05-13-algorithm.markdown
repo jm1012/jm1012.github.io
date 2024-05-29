@@ -25,6 +25,8 @@ a summary of algorithms
 
 [8. Dijkstra's algorithm]
 
+[9. Floyd warshall algorithm]
+
 
 
 ---
@@ -132,15 +134,65 @@ int f(int n) //피보나치 수열의 제 n항을 구한다. 배열의 관점에
 
   Knap sack : n번째 품목을 포함하는 경우와 제외하는 경우에 대해 탐색.
 
+---
+
 
 
 # 2. Prefix sum
+
+- pseudo code
+
+```c++
+prefix()
+{
+	for(i=0; i<=n; i++)
+		prefix_sum[i] = prefix_sum[i-1] + number[i];	
+}
+
+subsum(int i, int j)
+{
+    return prefix_sum[j] - prefix_sum[i];
+}
+```
+
+- outline
+
+  특정 구간의 합을 구해야 할 때 고려할 수 있는 알고리즘.
+
+  처음에 모든 수에 대해 누적합을 구해두고 누적합의 차를 이용하여 구간의 합을 구하는 방법.
+
+- algorithm
+
+  1. `sum(a,b)` 는 a에서 b까지 합
+  2. 모든 i 에 대해 `sum(0,i)` 를 구한다.
+  3. 구간 `i ~ j` 의 합 = `sum(0,j)` - `sum(0,i-1)`
+
+- problems
+
+  11659 구간 합 구하기 4 (기본개념)
+
+  16139 인간-컴퓨터 상호작용 (2차원 배열로 확장)
+
+  10986 나머지 합 (실수 다발)
+
+
+
+---
 
 
 
 # 3. Greedy algorithm
 
+- outline
 
+  현재 상태에서 알 수 있는 정보만을 이용하여 최선의 선택을 하는 알고리즘
+
+  다른 상황을 고려하지 않고 현 시점에서 최선의 선택을 하는 기법
+
+  이 알고리즘이 최선인 경우는 다음 두 조건이 만족될 때 이다.
+
+  1. greedy choice property : 앞의 선택이 이후의 선택에 영향을 주지 않음
+  2. optimal substructure : 문제의 최적해가 부분 문제에서도 최적해인 경우
 
 # 4. Binary search
 
@@ -229,3 +281,48 @@ void dijkstra(int start)
   5. `current`를 `방문완료` 상태로 바꾼다.
   6. 미방문노드  `K` 중 `d(K)`가 최소인 노드를 찾고 `current`에 할당한다.
   7. 도착노드가 방문완료 상태가 되거나, 더 이상의 미방문 노드가 없을때까지 `3.` ~ `6.` 을 반복한다.
+
+---
+
+
+
+# 9. Floyd-Warshall algorithm
+
+- c++ code
+
+```c++
+void Floyd()
+{
+	for (int m = 1; m <= n; m++) //가운데 노드
+		for (int s = 1; s <= n; s++) //시작 노드
+			for (int e = 1; e <= n; e++) //마지막 노드
+				if (d[s][e] > d[s][m] + d[m][e])
+					d[s][e] = d[s][m] + d[m][e]; //가운데를 거쳐가는 것이 더 빠르면 그걸로 업데이트한다.
+}
+```
+
+- outline
+
+  모든 노드에서 모든 노드로의 최단거리를 구하는 알고리즘
+
+  O(V^3)
+
+  s 에서 e 로 가는 최단 거리를 구하기 위해 중간노드 m 을 지나는 모든 경우를 비교
+
+  `d(s,e) = min(d(s,e), d(s,m) + d(m,e))`
+
+- algorithm
+
+  1. 노드 a 부터 노드 b 까지의 최단 거리를 저장할 배열을 만듦. d\[V][V] (방향그래프)
+
+  2. 배열 d 를 초기화.
+
+     2.1. `if(i==j) : d[i][j] = 0`
+
+     2.2. `if(i!=j) : d[i][j] = INF`
+
+  3. 모든 m에 대해 m을 지나가는 모든 경우를 확인함. m이 3중 for문의 가장 위에 있어야함. 
+
+     `d(s,e) = min(d(s,e), d(s,m) + d(m,e))`
+
+  
