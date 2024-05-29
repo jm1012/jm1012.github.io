@@ -70,10 +70,6 @@ int f(int n) //피보나치 수열의 제 n항을 구한다. 배열의 관점에
 }
 ```
 
-
-
-
-
 - outline
 
   최적화 이론의 한 기술
@@ -83,8 +79,8 @@ int f(int n) //피보나치 수열의 제 n항을 구한다. 배열의 관점에
   재사용을 위해 메모이제이션 활용함.
 
   최적 부분 구조 문제에서 매우 효과적인 알고리즘.
-
-​    
+  
+  
 
 - top down vs bottom up
 
@@ -97,8 +93,8 @@ int f(int n) //피보나치 수열의 제 n항을 구한다. 배열의 관점에
   * top down
 
     하지만 인간의 사고방식에 가까운 것은 top-down 방식이다. 자연스러운 접근이 가능함. bottom-up 방식은 코드짜는 것이 어려울수 있다.
-
-​    
+    
+    
 
 + 결론
 
@@ -109,10 +105,10 @@ int f(int n) //피보나치 수열의 제 n항을 구한다. 배열의 관점에
   bottom up 방식으로 접근했는데 서브문제의 해결이 어려운 경우. (점화식 모르겠을 때)
 
   서브문제 전체 크기에 비해 메인문제에 관여하는 수가 적을 때.
+  
+  
 
-​    
-
-* 문제 추천
+* problems
 
   2579 계단오르기
 
@@ -123,16 +119,18 @@ int f(int n) //피보나치 수열의 제 n항을 구한다. 배열의 관점에
   9251 LCS
 
   12865 평범한 배낭 (knap sack)
+  
+  
 
-​    
-
-* 각 알고리즘 접근법
+* 문제별 접근법
 
   LIS : 이중 for 문으로 0 < j < i < n 범위를 전부 탐색.
 
   LCS : 2개의 문자열의 공통부분 찾기, 2차원 배열과 특정 점화식을 이용해야함.
 
   Knap sack : n번째 품목을 포함하는 경우와 제외하는 경우에 대해 탐색.
+
+
 
 ---
 
@@ -161,11 +159,15 @@ subsum(int i, int j)
 
   처음에 모든 수에 대해 누적합을 구해두고 누적합의 차를 이용하여 구간의 합을 구하는 방법.
 
+  
+
 - algorithm
 
   1. `sum(a,b)` 는 a에서 b까지 합
   2. 모든 i 에 대해 `sum(0,i)` 를 구한다.
   3. 구간 `i ~ j` 의 합 = `sum(0,j)` - `sum(0,i-1)`
+
+
 
 - problems
 
@@ -194,15 +196,144 @@ subsum(int i, int j)
   1. greedy choice property : 앞의 선택이 이후의 선택에 영향을 주지 않음
   2. optimal substructure : 문제의 최적해가 부분 문제에서도 최적해인 경우
 
+---
+
+
+
 # 4. Binary search
+
+- pseudo code
+
+```c++
+// initialize
+left = 최소값
+right = 최대값
+
+while(left <= right)
+{
+	// 중간값 선택
+	mid = (left + right) / 2; 
+
+	// 값 비교후, 범위 재조정.
+	if(mid == value)
+		break;
+	else if (mid < value)
+		left = mid + 1;
+	else
+		right = mid - 1;
+}
+
+return mid;
+```
+
+- outline
+
+  **정렬된 값**에서 특정 값을 찾기 위해 사용하는 알고리즘.
+
+  중간 지점의 값과 찾을 값을 비교하고 다음 범위를 선택함을 반복하여 탐색범위를 절반씩 줄여감.
+
+  O(logn)
+
+  
+
+- 주의할 점
+
+  반드시 정렬된 값에서만 가능
+
+  범위 지정 주의하기. 무한루프 발생 가능
+
+---
 
 
 
 # 5. Divide and Conquer
 
+- outline
+
+  문제를 해결 가능한 수준의 작은 문제들로 분할하고, 각 문제를 해결한 값을 합쳐 최종 해를 구하는 알고리즘.
+
+  보통 재귀함수로 구현한다.
+
+  divide -> conquer -> combine
+
+  
+
+- advantages :
+
+  병렬적 해결에서 강점
+
+  어려운 문제를 해결하기 위해 고려할 수 있는 알고리즘
+
+  
+
+- disadvantages :
+
+  재귀함수의 문제점을 가짐
+
+  문제를 최소 단위로 분할하는 기준이 중요함.
+
+  퍼포먼스에 상당한 영향을 주는데, 적절한 기준을 선정하는 것이 어려운 문제점이 있음.
+
+
+
+- problems
+
+  6549 히스토그램에서 가장 큰 직사각형
+
+
+
+---
+
 
 
 # 6. Priority queue
+
+- header \<queue>
+
+```c++
+#include <iostream>
+#include <algorithm>
+#include <queue>
+
+struct cmp
+{
+    bool operator() (pair<int,int> &a, pair<int,int> &b)
+    {
+        return a.first < b.first;
+    }
+}
+
+int main()
+{
+    // 선언
+    priority_queue<int> pq1; // 선언 (default : 오름차순)
+    priority_queue<int, vector<int>, less<int>> pq2; // 정수 내림차순으로 선언
+    priority_queue<int, vector<int>, greater<int>> pq3; // 정수 오름차순으로 선언
+    
+    // 연산자 오버로딩이용, 원하는 정렬기준을 만들 수 있음
+    priority_queue<pair<int,int>, vector<pair<int,int>>, cmp> pq4;
+        
+    // methods
+    pq1.push(1);
+    pq1.pop();
+    pq1.top();
+    pq1.empty();
+    pq1.size();
+    
+}
+```
+
+
+
+- outline
+
+  우선순위 큐는 값들이 오름차순 또는 내림차순으로 push, pop 되는 큐이다.
+
+  push, pop은 O(logn) 에 실행된다.
+
+  보통 구현시 배열을 이용한다.
+
+
 
 
 
