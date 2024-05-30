@@ -335,9 +335,87 @@ int main()
 
 
 
+---
+
 
 
 # 7. Graph search
+
+## 7.1. DFS
+
+- c++ code
+
+```c++
+void dfs(const vector<int> graph[], int current)
+{ 
+    visited[current] = true;
+
+    for(int next: graph[current]) 
+    { 
+        if(!visited[next]) 
+            dfs(graph, next); 
+    }
+}
+```
+
+
+
+- outline
+
+  DFS : depth-first search
+
+  스택 또는 재귀함수로 구현
+
+  경로의 특징을 저장해야 하는 경우 사용함
+
+
+
+## 7.2. BFS
+
+- c++ code
+
+```c++
+// adjacent 인접 리스트, start 시작 노드
+void bfs(const vector<int> adjacent[], int start) 
+{ 
+    // start 방문
+    q.push(start);
+    visited[start] = true;
+
+    // 큐가 빌 때까지 반복
+    while(!q.empty()) 
+    { 
+        // 큐에서 노드 하나를 꺼냄
+        int current = q.front();
+        q.pop();
+
+        // current의 인접 노드 : next
+        for(int next: adjacent[current]) 
+        { 
+            // 만일 next에 방문하지 않았다면 방문
+            if(!visited[next]) 
+            { 
+                q.push(next);
+                visited[next] = true;
+            }
+        }
+    }
+}
+```
+
+
+
+- outline
+
+  BFS : breadth-first search
+
+  큐로 구현
+
+  최단 거리를 구할 때 사용함
+
+
+
+---
 
 
 
