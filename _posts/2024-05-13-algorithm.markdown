@@ -25,7 +25,9 @@ a summary of algorithms
 
 [8. Dijkstra's algorithm]
 
-[9. Floyd warshall algorithm]
+[9. Floyd-Warshall algorithm]
+
+[10. Bellman-Ford algorithm]
 
 
 
@@ -534,4 +536,115 @@ void Floyd()
 
      `d(s,e) = min(d(s,e), d(s,m) + d(m,e))`
 
-  
+
+
+---
+
+
+
+# 10. Bellman-Ford algorithm
+
+- c++ code (완전하지 않음)
+
+```c++
+#define INF ((1 << (sizeof(int)*8-2))-1)
+
+struct Edge
+{
+    int source;
+	int dest;
+	int weight;
+}
+
+
+void bellman_ford()
+{
+	input();
+
+	// 최단거리 저장할 변수
+	long long* distance = new long long[node_count + 1];
+
+	// 초기화
+	for (int i = 1; i <= node_count; i++)
+	{
+		if (i == 1) // 1번 노드에서 출발
+			distance[i] = 0;
+		else
+			distance[i] = INF;
+	}
+
+	// 모든 간선을 (노드의 수 - 1) 만큼 반복하여 탐색
+	for (int i = 0; i < node_count - 1; i++)
+	{
+		for (int j = 0; j < edge_count; j++)
+		{
+			// 해당 노드까지 경로가 없다면 pass
+			if (distance[edge[j].source] == INF)
+				continue;
+
+			// 최단거리 갱신
+			if (distance[edge[j].destination] > distance[edge[j].source] + edge[j].weight)
+				distance[edge[j].destination] = distance[edge[j].source] + edge[j].weight;
+		}
+	}
+
+	// 음의 간선이 포함된 사이클이 존재하는지 확인
+	for (int i = 0; i < edge_count; i++)
+	{
+		// 해당 노드까지 경로가 없다면 pass
+		if (distance[edge[i].source] == INF)
+			continue;
+
+		// 거리가 갱신된다면 음의 간선이 포함된 사이클이 존재함
+		if (distance[edge[i].destination] > distance[edge[i].source] + edge[i].weight)
+		{
+			cout << "-1";
+			return;
+		}
+	}
+
+	for (int i = 2; i <= node_count; i++)
+	{
+		if (distance[i] == INF)
+			cout << "-1\n";
+		else
+			cout << distance[i] << '\n';
+	}
+}
+```
+
+
+
+- outline
+
+  가중 유향그래프에서 최단 경로를 탐색하는 알고리즘. (weighted digraph)
+
+  음수 가중치도 처리가능.
+
+  Bellman-Ford runs in **O(|V|*|E|)**
+
+  |V| : a number of vertices
+
+  |E| : a number of edges
+
+
+
+- algorithm
+
+  1. source 노드에서 n 노드까지 거리를 저장할 배열을 만듦. `dist[N]`
+
+  2. `dist` 배열을 INF로 초기화하고, `dist[source] = 0` 으로 초기화
+
+  3. 모든 edge를 방문
+
+     if 현재 edge까지 경로가 없다면 : continue
+
+     if (dist[목적지] > dist[출발지] + 가중치) : 갱신
+
+  4. step3를 (노드개수 - 1) 회 반복
+
+
+
+- 주의할점
+
+  언더플로우가 발생할 수 있기 때문에 확인할 것
