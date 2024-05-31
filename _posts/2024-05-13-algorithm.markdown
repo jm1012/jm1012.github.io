@@ -623,9 +623,9 @@ void bellman_ford()
 
   Bellman-Ford runs in **O(\|V\|*\|E\|)**
 
-  |V| : a number of vertices
+  \|V\| : a number of vertices
 
-  |E| : a number of edges
+  \|E\| : a number of edges
 
 
 
