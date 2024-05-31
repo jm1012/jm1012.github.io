@@ -621,7 +621,7 @@ void bellman_ford()
 
   음수 가중치도 처리가능.
 
-  Bellman-Ford runs in **O(|V|*|E|)**
+  Bellman-Ford runs in **O(\|V\|*\|E\|)**
 
   |V| : a number of vertices
 
