@@ -29,6 +29,8 @@ a summary of algorithms
 
 [10. Bellman-Ford algorithm]
 
+[11. Two-Pointer algorithm]
+
 
 
 ---
@@ -81,7 +83,7 @@ int f(int n) //피보나치 수열의 제 n항을 구한다. 배열의 관점에
   재사용을 위해 메모이제이션 활용함.
 
   최적 부분 구조 문제에서 매우 효과적인 알고리즘.
-  
+
   
 
 - top down vs bottom up
@@ -124,13 +126,22 @@ int f(int n) //피보나치 수열의 제 n항을 구한다. 배열의 관점에
   
   
 
-* 문제별 접근법
+* 유형별 접근법
 
   LIS : 이중 for 문으로 0 < j < i < n 범위를 전부 탐색.
 
   LCS : 2개의 문자열의 공통부분 찾기, 2차원 배열과 특정 점화식을 이용해야함.
 
   Knap sack : n번째 품목을 포함하는 경우와 제외하는 경우에 대해 탐색.
+
+
+
+- **어려운 문제 접근 아이디어**
+
+  1. 계산 결과를 저장할 배열 dp를 선언. 2차원 이상이 될 수도 있음
+
+  2. dp 를 이용한 **점화식**을 세우는 것을 목표로 하기
+  3. 점화식을 이용한 top-down 방식 코드 구현
 
 
 
@@ -650,3 +661,70 @@ void bellman_ford()
 - 주의할점
 
   언더플로우가 발생할 수 있기 때문에 확인할 것
+
+
+
+---
+
+
+
+# 11. Two-Pointer algorithm
+
+- code
+
+```c++
+// two pointer
+	int left = 0;
+	int right = n - 1;
+	int cnt = 0;
+
+	while (left < n && right < n)
+	{
+		if (left >= right)
+			break;
+
+		if (arr[left] + arr[right] == x)
+		{
+			cnt++;
+
+			if (arr[left] == arr[left + 1])
+				left++;
+			else if (arr[right] == arr[right - 1])
+				right--;
+			else
+			{
+				left++;
+				right--;
+			}
+		}
+		else if (arr[left] + arr[right] < x)
+		{
+			left++;
+		}
+		else
+		{
+			right--;
+		}
+	}
+
+```
+
+
+
+- outline
+
+  두 개의 포인터를 이용하여 배열에 순차적으로 접근하는 알고리즘
+
+  정렬된 배열을 탐색
+
+  각 포인터를 한 방향으로만 움직이며 탐색
+
+  이중 반복문으로 시간 초과가 날때 고려할 수 있는 방법
+
+  **O(n)**
+
+
+
+- 예제
+
+  구간 합 구하기
