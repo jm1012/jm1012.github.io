@@ -31,6 +31,8 @@ a summary of algorithms
 
 [11. Two-Pointer algorithm]
 
+[12. Meet-In-The-Middle(MITM) algorithm]
+
 
 
 ---
@@ -728,3 +730,23 @@ void bellman_ford()
 - 예제
 
   구간 합 구하기
+
+
+
+# 12. Meet-In-The-Middle(MITM) algorithm
+
+- outline
+
+  탐색범위를 절반으로 나눠서 left, right 값을 계산하고, 각 값을 이용하여 답을 찾는 알고리즘
+
+  bruteforce 를 사용해야 하지만 시간복잡도가 너무 커질때 고려할 수 있는 방법이다
+
+-  예제
+
+  1450 냅색문제
+
+  bruteforce : **O(2^n)**
+
+  MITM : **O(2^(n/2) * 2)**
+
+  시간복잡도가 크게 감소함.
