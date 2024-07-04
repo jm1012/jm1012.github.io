@@ -33,6 +33,8 @@ a summary of algorithms
 
 [12. Meet-In-The-Middle(MITM) algorithm]
 
+[13. Union-Find]
+
 
 
 ---
@@ -731,6 +733,8 @@ void bellman_ford()
 
   구간 합 구하기
 
+---
+
 
 
 # 12. Meet-In-The-Middle(MITM) algorithm
@@ -750,3 +754,60 @@ void bellman_ford()
   MITM : **O(2^(n/2) * 2)**
 
   시간복잡도가 크게 감소함.
+
+
+
+---
+
+# 13. Union-Find
+
+- code
+
+  ```c++
+  int parent[N];
+  
+  int init()
+  {
+      // 초기화, 각 집합 {i} 는 자신이 대표원소이므로, 부모는 자신이됨.
+      for(int i=0;i<N;i++)
+          parent[i]=i;
+  }
+  
+  int find(int element)
+  {
+      // 자신이 대표원소임
+  	if(element == parent[element])
+  		return element;
+      
+      // 경로압축
+      return parent[element] = find(parent[element]);
+  }
+  
+  void merge(int element1, int element2)
+  {
+      // 각 원소가 속한 집합의 대표원소를 찾음
+      element1 = find(element1);
+      element2 = find(element2);
+      
+      // 두 원소가 같은 집합내에 있음, 유니온하지 않음
+      if (element1 == element2) return;
+      
+      // 유니온
+      // 임의로 정해도 되고, 더 최적화를 해도됨.
+      parent[element1] = element2;
+  }
+  ```
+
+  
+
+- outline
+
+  집합연산 union과 find를 구현하여 특정 원소 a, b 가 같은 집합에 속하는지 판단하는 알고리즘
+
+  find : 집합을 대표하는 원소를 찾는 함수
+
+  union : 두 집합을 연결하는 함수
+
+- 예제
+
+  4195 : 구조체와 unordered_map 을 사용하는 좋은 예제
