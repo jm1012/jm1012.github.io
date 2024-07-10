@@ -132,10 +132,14 @@ int f(int n) //피보나치 수열의 제 n항을 구한다. 배열의 관점에
 
 * 유형별 접근법
 
-  LIS : 이중 for 문으로 0 < j < i < n 범위를 전부 탐색.
+  LIS1 : 이중 for 문으로 0 < j < i < n 범위를 전부 탐색. O(n^2)
 
+  LIS2 : vector + binary search (lower_bound), 값을 push_back or update 하며 진행. O(nlogn)
+
+  LIS + 역추적 : 1번방법에서 path를 기록, 추적 / 2번방법에서 dp[] 의 감소를 추적
+  
   LCS : 2개의 문자열의 공통부분 찾기, 2차원 배열과 특정 점화식을 이용해야함.
-
+  
   Knap sack : n번째 품목을 포함하는 경우와 제외하는 경우에 대해 탐색.
 
 
