@@ -35,6 +35,8 @@ a summary of algorithms
 
 [13. Union-Find]
 
+[14. Minimum Spanning Tree(MST)]
+
 
 
 ---
@@ -815,3 +817,135 @@ void bellman_ford()
 - 예제
 
   4195 : 구조체와 unordered_map 을 사용하는 좋은 예제
+
+
+
+---
+
+# 14. Minimum Spanning Tree(MST)
+
+* outline
+
+  MST 란 가중 그래프에서 모든 노드를 최소 가중치로 연결한 그래프 (트리) 를 의미한다.
+
+  최소 가중치로 연결하기 때문에 자연스럽게 **간선의 개수 = 노드의 개수 - 1** 이 성립한다.
+
+  다음에 설명할 MST 를 찾는 알고리즘 2가지는 모두 그리디하게 구현된다.
+
+  kruskal : 간선을 선택
+
+  prim : 노드를 선택
+
+---
+
+
+
+## 14.1. kruskal's MST algorithm
+
+- code
+
+```c++
+void findMST()
+{
+	int sum_of_weights = 0;
+
+    // 가중치 기준 오름차순 정렬된 edge 를 방문
+	for (int i = 0; i < num_of_edges; i++)
+	{
+		int w = get<0>(edge[i]);
+		int a = get<1>(edge[i]);
+		int b = get<2>(edge[i]);
+
+        // 만약 간선 a-b 가 사이클을 형성하면 다음 노드를 탐색
+		if (isCycle(a, b) == true)
+			continue;
+		
+        // 그렇지 않다면 a-b 를 연결한다.
+		merge(a, b);
+		sum_of_weights += w;
+	}
+
+	cout << sum_of_weights;
+}
+```
+
+
+
+- algorithm
+  1. 간선을 가중치 기준으로 오름차순 정렬한다.
+  2. 사이클을 형성하지 않도록 가중치가 작은 간선부터 선택한다.
+  3. n-1개의 간선이 선택되면 중단한다.
+
+---
+
+## 14.2. prim's MST algorithm
+
+
+
+- code ( baekjoon 4386)
+
+```c++
+// prim's MST algorithm
+void primMST()
+{
+	priority_queue<pair<double, int>, vector<pair<double, int>>, cmp> que;
+	bool visited[N]{};
+	double sum_of_dist = 0;
+
+	// choose star[0], push every edges start from star[0]
+	visited[0] = true;
+	for (int i = 1; i < num_star; i++)
+	{
+		double d = find_distance(star[0], star[i]);
+
+		que.push({ d,i });
+	}
+	
+	// choose the next star
+	// 별을 n-1개 선택
+	for (int i = 1; i < num_star; i++)
+	{
+		// 우선순위 큐 pop
+		while (visited[que.top().second]) que.pop(); // 방문한 별인 경우 스킵
+
+		double dist = que.top().first;
+		int index = que.top().second;
+		que.pop();
+
+		// 현재 별 방문, 거리합 업데이트
+		visited[index] = true;
+		sum_of_dist += dist;
+
+		//cout << "select star" << index << endl;
+
+		// 현재 별에 인접한 모든 별까지 거리를 계산, 우선순위큐에 삽입
+		for (int j = 0; j < num_star; j++)
+		{
+			if (visited[j] == true)	continue;
+				
+			double d = find_distance(star[index], star[j]);
+			que.push({ d,j });
+		}
+
+	}
+
+	// 소수점 3번째에서 반올림
+	cout << round(sum_of_dist * 100) / 100;
+}
+```
+
+
+
+- algorithm
+
+  1. 임의의 노드하나를 선택한다.
+
+  2. 선택한 노드에 연결된 노드들을 가중치 기준으로 priority queue에 삽입한다.
+
+  3. priority queue 에서 다음 노드를 pop한다.
+
+     3.1. 만약 이미 방문한 노드라면 3번으로 이동한다.
+
+     3.2. 방문하지 않았다면 해당 노드를 선택하고 2번으로 이동한다.
+
+  4. 만약 노드가 n-1개 선택되었다면 중단한다.
